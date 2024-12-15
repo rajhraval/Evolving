@@ -1,0 +1,4 @@
+{
+  "/api/problems": "/problems",
+  "/api/problems?*": "/problems?$1"
+}
