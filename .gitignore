@@ -64,12 +64,8 @@ fastlane/test_output
 
 # Node.js
 node_modules/
-npm-debug.log
-npm-debug.log.*
-.npm
-.env
-.env.local
-.env.*.local
+npm-debug.log*
+package-lock.json
 
 # IDE
 .idea/
