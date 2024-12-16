@@ -119,7 +119,7 @@ struct ExploreView: View {
             .navigationStyle()
         }
         .task {
-            await viewModel.fetchExploreData()
+            await viewModel.loadExploreData()
         }
     }
 }

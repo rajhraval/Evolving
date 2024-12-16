@@ -11,12 +11,7 @@ import SwiftUI
 class ExploreViewModel {
 
     var isLoading = false
-    var hasMorePages = true
-    var isFetchingNextPage = false
     var error: APIError? = nil
-
-    var currentPage = 1
-    var totalPages = 1
 
     var searchText = ""
     var selectedProblem: ExploreProblemType = .all
@@ -24,10 +19,17 @@ class ExploreViewModel {
     var exploreItems: [ExploreData] = []
     var exploreProblems: [ExploreProblemType] = [.all]
 
+    var currentPage = 1
+    var totalPages = 1
+    var hasMorePages = true
+    var isFetchingNextPage = false
+
     var filteredItems: [ExploreData] {
         exploreItems.filter { item in
-            let matchesSearch = searchText.isEmpty || item.title.localizedCaseInsensitiveContains(searchText)
-            let matchesProblem = selectedProblem == .all || item.problems.contains(selectedProblem.title)
+            let matchesSearch = searchText.isEmpty ||
+                item.title.localizedCaseInsensitiveContains(searchText)
+            let matchesProblem = selectedProblem == .all ||
+                item.problems.contains(selectedProblem.title)
             return matchesSearch && matchesProblem
         }
     }
@@ -35,33 +37,54 @@ class ExploreViewModel {
     private let exploreService: ExploreService
     private let fileStorage: FileStorage
     private let cacheFileName = "explore_cache.json"
-
+    
+    // MARK: - Initialization
+    
     init(
         exploreService: ExploreService = ExploreService(),
         fileStorage: FileStorage = FileStorage()
     ) {
         self.exploreService = exploreService
         self.fileStorage = fileStorage
-        loadFromCache()
     }
     
-    func fetchExploreData() async {
+    func loadExploreData() async {
+        if let cachedResponse = loadFromCache() {
+            updateStateFromCache(cachedResponse)
+            return
+        }
+        await fetchExploreData()
+    }
+    
+    private func loadFromCache() -> ExploreResponse? {
+        fileStorage.load(from: cacheFileName, as: ExploreResponse.self)
+    }
+    
+    private func updateStateFromCache(_ cachedResponse: ExploreResponse) {
+        exploreItems = cachedResponse.data
+        exploreProblems = [.all] + cachedResponse.problemFilters
+        totalPages = cachedResponse.metadata.totalPages
+        
+        // Calculate next page based on cached items
+        let itemsPerPage = 10
+        currentPage = (exploreItems.count / itemsPerPage) + 1
+        hasMorePages = currentPage <= totalPages
+    }
+    
+    private func fetchExploreData() async {
         guard !isFetchingNextPage else { return }
+        
         isLoading = currentPage == 1
         isFetchingNextPage = true
         
         do {
-            let exploreResponse = try await exploreService.fetchExploreData(
-                page: currentPage,
-                limit: 10
-            )
-            saveExploreResponse(exploreResponse)
-            hasMorePages = currentPage < exploreResponse.metadata.totalPages
+            let response = try await exploreService.fetchExploreData(page: currentPage, limit: 10)
+
+            hasMorePages = currentPage < response.metadata.totalPages
             currentPage += 1
+
+            saveExploreResponse(response)
         } catch {
-            if currentPage == 1 {
-                loadFromCache()
-            }
             self.error = error as? APIError
             debugPrint("Error fetching explore data: \(error)")
         }
@@ -71,39 +94,32 @@ class ExploreViewModel {
     }
     
     func loadMoreIfNeeded(currentItem item: ExploreData) async {
-        let thresholdIndex = exploreItems.index(exploreItems.endIndex, offsetBy: -3)
-        if let itemIndex = exploreItems.firstIndex(where: { $0.id == item.id }),
-           itemIndex == thresholdIndex,
-           hasMorePages {
-            await fetchExploreData()
-        }
-    }
+        guard !isFetchingNextPage && hasMorePages else { return }
 
+        let thresholdIndex = exploreItems.index(exploreItems.endIndex, offsetBy: -3)
+        guard let itemIndex = exploreItems.firstIndex(where: { $0.id == item.id }),
+              itemIndex == thresholdIndex else {
+            return
+        }
+
+        await fetchExploreData()
+    }
+    
     private func saveExploreResponse(_ exploreResponse: ExploreResponse) {
-        if currentPage == 1 {
+        if currentPage == 2 {
             exploreItems = exploreResponse.data
             exploreProblems = [.all] + exploreResponse.problemFilters
             totalPages = exploreResponse.metadata.totalPages
-            saveToCache(exploreResponse)
         } else {
             exploreItems.append(contentsOf: exploreResponse.data)
         }
-    }
 
-}
-
-extension ExploreViewModel {
+        let cacheResponse = ExploreResponse(
+            metadata: exploreResponse.metadata,
+            data: exploreItems,
+            problemFilters: exploreProblems.filter { $0 != .all }
+        )
     
-    func saveToCache(_ exploreResponse: ExploreResponse) {
-        let data = exploreResponse.data
-        fileStorage.save(data, to: cacheFileName)
-    }
-    
-    func loadFromCache() {
-        if let data = fileStorage.load(from: cacheFileName, as: ExploreResponse.self) {
-            exploreItems = data.data
-            exploreProblems = [.all] + data.problemFilters
-            totalPages = data.metadata.totalPages
-        }
+        fileStorage.save(cacheResponse, to: cacheFileName)
     }
 }
