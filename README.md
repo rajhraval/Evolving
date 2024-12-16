@@ -1,6 +1,6 @@
 # Evolving
-
 A demo iOS app
+
 ![App Banner](https://github.com/user-attachments/assets/860a9e20-ec6d-4a72-847b-e84586bf10d5)
 
 ## For the iOS App
