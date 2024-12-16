@@ -12,12 +12,8 @@ public class ExploreService: API {
 
     public init() {}
 
-    public func fetchExploreData(page: Int, limit: Int, keyword: String?, problems: [String]?) async throws -> ExploreResponse {
-        try await request(
-            ExploreEndpoint.explore(
-                page: page, limit: limit, keyword: keyword, problems: problems
-            )
-        )
+    public func fetchExploreData(page: Int, limit: Int) async throws -> ExploreResponse {
+        try await request(ExploreEndpoint.explore(page: page, limit: limit))
     }
 
 }

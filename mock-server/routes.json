@@ -1,4 +1,4 @@
 {
-  "/api/problems": "/problems",
-  "/api/problems?*": "/problems?$1"
+  "/api/explore": "/data",
+  "/api/explore?*": "/data?$1"
 }

@@ -12,6 +12,8 @@ public final class FileStorage {
         URL.documentsDirectory
     }
 
+    public init() {}
+
     public func save<T: Encodable>(_ data: T, to fileName: String) {
         let fileURL = documentsDirectory.appendingPathComponent(fileName)
         do {

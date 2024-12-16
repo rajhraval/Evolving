@@ -35,6 +35,9 @@ struct ExploreView: View {
         LazyVGrid(columns: columns, spacing: 24) {
             ForEach(viewModel.filteredItems) { item in
                 ExploreItemView(item: item)
+                    .task {
+                        await viewModel.loadMoreIfNeeded(currentItem: item)
+                    }
             }
         }
     }
@@ -43,11 +46,10 @@ struct ExploreView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
+                    filterView
+                    gridView
                     if viewModel.isLoading {
                         ProgressView()
-                    } else {
-                        filterView
-                        gridView
                     }
                 }
                 .scrollClipDisabled()
@@ -55,6 +57,9 @@ struct ExploreView: View {
             }
             .scrollIndicators(.hidden)
             .searchable(text: $viewModel.searchText, prompt: Text("Search"))
+            .task {
+                await viewModel.fetchExploreData()
+            }
         }
     }
 }

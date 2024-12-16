@@ -1,5 +1,9 @@
 {
-  "status": true,
+  "metadata": {
+    "total_pages": 3,
+    "premium_status": 1,
+    "status": true
+  },
   "data": [
     {
       "id": 31,
@@ -904,8 +908,6 @@
       "mins": "5-10 mins"
     }
   ],
-  "total_pages": 3,
-  "premium_status": 1,
   "problem_filter": [
     {
       "title": "🧠 Neurodiversity",
@@ -937,4 +939,3 @@
     }
   ]
 }
-
