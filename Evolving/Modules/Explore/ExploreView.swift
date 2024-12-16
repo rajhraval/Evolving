@@ -54,9 +54,6 @@ struct ExploreView: View {
                 .padding(.horizontal, 20)
             }
             .scrollIndicators(.hidden)
-            .onAppear {
-                viewModel.fetchExploreData()
-            }
             .searchable(text: $viewModel.searchText, prompt: Text("Search"))
         }
     }

@@ -6,11 +6,18 @@
 //
 
 import SwiftUI
+import Utils
 
 public class ExploreService: API {
 
-    public func fetchExploreData() async throws -> ExploreResponse {
-        try await request(ExploreEndpoint.explore)
+    public init() {}
+
+    public func fetchExploreData(page: Int, limit: Int, keyword: String?, problems: [String]?) async throws -> ExploreResponse {
+        try await request(
+            ExploreEndpoint.explore(
+                page: page, limit: limit, keyword: keyword, problems: problems
+            )
+        )
     }
 
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CF4FDC352D0C6C7F009EAC88 /* DesignComponents in Frameworks */ = {isa = PBXBuildFile; productRef = CF4FDC342D0C6C7F009EAC88 /* DesignComponents */; };
 		CF54178D2D0EB0CB0036BCED /* Networking in Frameworks */ = {isa = PBXBuildFile; productRef = CF54178C2D0EB0CB0036BCED /* Networking */; };
+		CF72A9AA2D0FEE6A0041C3D5 /* Utils in Frameworks */ = {isa = PBXBuildFile; productRef = CF72A9A92D0FEE6A0041C3D5 /* Utils */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Frameworks/DesignComponents,
+				Frameworks/Utils,
 				Info.plist,
 			);
 			target = CF2B218E2D0C629300CEB6A0 /* Evolving */;
@@ -42,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF72A9AA2D0FEE6A0041C3D5 /* Utils in Frameworks */,
 				CF54178D2D0EB0CB0036BCED /* Networking in Frameworks */,
 				CF4FDC352D0C6C7F009EAC88 /* DesignComponents in Frameworks */,
 			);
@@ -96,6 +99,7 @@
 			packageProductDependencies = (
 				CF4FDC342D0C6C7F009EAC88 /* DesignComponents */,
 				CF54178C2D0EB0CB0036BCED /* Networking */,
+				CF72A9A92D0FEE6A0041C3D5 /* Utils */,
 			);
 			productName = Evolving;
 			productReference = CF2B218F2D0C629300CEB6A0 /* Evolving.app */;
@@ -374,6 +378,10 @@
 		CF54178C2D0EB0CB0036BCED /* Networking */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Networking;
+		};
+		CF72A9A92D0FEE6A0041C3D5 /* Utils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Utils;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
