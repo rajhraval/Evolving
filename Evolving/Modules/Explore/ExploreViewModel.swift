@@ -13,6 +13,7 @@ class ExploreViewModel {
     var isLoading = false
     var hasMorePages = true
     var isFetchingNextPage = false
+    var error: APIError? = nil
 
     var currentPage = 1
     var totalPages = 1
@@ -61,6 +62,7 @@ class ExploreViewModel {
             if currentPage == 1 {
                 loadFromCache()
             }
+            self.error = error as? APIError
             debugPrint("Error fetching explore data: \(error)")
         }
         

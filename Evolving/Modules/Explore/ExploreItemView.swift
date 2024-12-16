@@ -6,35 +6,63 @@
 //
 
 import SwiftUI
-import Nuke
 
 struct ExploreItemView: View {
     
     let item: ExploreData
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            CachedImageView(
-                url: item.thumbnailURL,
-                height: 116,
-                cornerRadius: 12
-            )
-            VStack(alignment: .leading, spacing: 8) {
-                Text(item.title)
-                    .lineLimit(2)
-                    .font(.headline)
-                HStack(spacing: 8) {
-                    Text(item.sessions)
-                    Text("•")
-                    Text(item.mins)
-                }
-                .lineLimit(1)
-                .font(.footnote)
+    private var image: some View {
+        CachedImageView(
+            url: item.thumbnailURL,
+            width: 170,
+            cornerRadius: 12
+        )
+    }
+
+    @ViewBuilder
+    private var lockBackground: some View {
+        if item.isPremium {
+            ZStack {
+                Circle()
+                    .fill(Color.lockBackground.tertiary)
+                Image(systemName: "lock.fill")
+                    .foregroundStyle(.white)
             }
+            .size(.large)
+            .padding(.regular)
+        }
+    }
+
+    var infoDescription: some View {
+        VStack(alignment: .leading, spacing: .small) {
+            Text(item.title)
+                .customHeadline()
+                .foregroundStyle(.white)
+            HStack(spacing: .small) {
+                Text(item.sessions)
+                Text("•")
+                Text(item.mins)
+            }
+            .lineLimit(1)
+            .customCaption()
+            .foregroundStyle(.white.secondary)
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: .regular) {
+            image
+                .overlay(alignment: .bottomLeading) {
+                    lockBackground
+                }
+            infoDescription
         }
     }
 }
 
 #Preview {
-    ExploreItemView(item: .mockData)
+    ZStack {
+        Color.black
+        ExploreItemView(item: .mockData)
+    }
 }

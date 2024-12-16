@@ -12,13 +12,24 @@ struct ExploreView: View {
     @State private var viewModel = ExploreViewModel()
 
     private let columns = [
-        GridItem(.flexible(), spacing: 14, alignment: .top),
-        GridItem(.flexible(), alignment: .top)
+        GridItem(.adaptive(minimum: 170), spacing: .regular2, alignment: .top),
+        GridItem(.adaptive(minimum: 170), alignment: .top)
     ]
+
+    private var title: some View {
+        Text("Discover")
+            .customTitle()
+            .foregroundStyle(.white)
+            .padding(.bottom, .mini)
+    }
+
+    private var searchBar: some View {
+        AppTextField(text: $viewModel.searchText, placeholder: "Search", isSearch: true)
+    }
 
     private var filterView: some View {
         ScrollView(.horizontal) {
-            HStack(spacing: 14) {
+            HStack(spacing: .regular2) {
                 ForEach(viewModel.exploreProblems) { problem in
                     ExploreProblemItemView(
                         problem: problem,
@@ -31,35 +42,84 @@ struct ExploreView: View {
         }
     }
 
+    @ViewBuilder
     private var gridView: some View {
-        LazyVGrid(columns: columns, spacing: 24) {
-            ForEach(viewModel.filteredItems) { item in
-                ExploreItemView(item: item)
-                    .task {
-                        await viewModel.loadMoreIfNeeded(currentItem: item)
-                    }
+        if viewModel.filteredItems.isEmpty {
+            EmptyStateView(.noResults)
+        } else {
+            LazyVGrid(columns: columns, spacing: .medium) {
+                ForEach(viewModel.filteredItems) { item in
+                    ExploreItemView(item: item)
+                        .task {
+                            await viewModel.loadMoreIfNeeded(currentItem: item)
+                        }
+                }
+                if viewModel.isLoading {
+                    ProgressView()
+                }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var errorStateView: some View {
+        if let error = viewModel.error {
+            EmptyStateView(
+                .errorState(
+                    title: error.title,
+                    description: error.description
+                )
+            )
+        }
+    }
+
+    private var leftBarButton: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Text("Explore")
+                .customNavigationTitle()
+                .foregroundStyle(.white)
+        }
+    }
+
+    private var rightBarButton: some ToolbarContent {
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            Group {
+                AppButton(systemName: "heart.fill") {}
+                AppButton(systemName: "music.note") {}
+            }
+            .navigationButtonStyle(.primary)
         }
     }
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 24) {
-                    filterView
-                    gridView
-                    if viewModel.isLoading {
-                        ProgressView()
+                VStack(alignment: .leading, spacing: .regular2) {
+                    title
+                    searchBar
+                    VStack(spacing: .medium) {
+                        if let _ = viewModel.error {
+                            errorStateView
+                        } else {
+                            filterView
+                            gridView
+                        }
                     }
+                    .scrollClipDisabled()
                 }
-                .scrollClipDisabled()
-                .padding(.horizontal, 20)
+                .padding(.horizontal, .regular3)
             }
             .scrollIndicators(.hidden)
-            .searchable(text: $viewModel.searchText, prompt: Text("Search"))
-            .task {
-                await viewModel.fetchExploreData()
+            .background(Color.black)
+            .toolbar {
+                leftBarButton
+                rightBarButton
             }
+            .navigationTitle("Explore")
+            .navigationStyle()
+        }
+        .task {
+            await viewModel.fetchExploreData()
         }
     }
 }

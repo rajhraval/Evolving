@@ -15,11 +15,16 @@ struct ExploreProblemItemView: View {
 
     var body: some View {
         Button(action: onTap) {
-            Text(problem.title)
-                .foregroundStyle(.white)
+            HStack(spacing: 6) {
+                Text(problem.title)
+                if isSelected {
+                    Image(systemName: "checkmark")
+                        .fontWeight(.semibold)
+                        .fontDesign(.rounded)
+                }
+            }
         }
-        .buttonStyle(.borderedProminent)
-        .tint(isSelected ? .red : .blue)
+        .chipButtonStyle(isSelected)
     }
 }
 

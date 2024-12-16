@@ -7,17 +7,21 @@
 
 import Foundation
 
-public enum FontName: String {
-    case plusJakartaSans
+enum FontName: String {
+    case lato
+    case gothamRounded
 
     var name: String {
         rawValue.capitalized
     }
 }
 
-public enum FontWeight: String {
+enum FontWeight: String {
     case regular
-    
+    case medium
+    case book
+    case bold
+
     var name: String {
         rawValue.capitalized
     }

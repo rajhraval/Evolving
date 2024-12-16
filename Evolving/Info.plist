@@ -9,9 +9,9 @@
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>GothamRoundedBold.ttf</string>
-		<string>GothamRoundedBook.ttf</string>
-		<string>GothamRoundedMedium.ttf</string>
+		<string>GothamRounded-Bold.ttf</string>
+		<string>GothamRounded-Book.ttf</string>
+		<string>GothamRounded-Medium.ttf</string>
 		<string>Lato-Bold.ttf</string>
 		<string>Lato-Regular.ttf</string>
 		<string>Lato-Thin.ttf</string>

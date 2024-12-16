@@ -14,7 +14,7 @@ public enum APIError: Error {
     case internetError
     case unknownError(error: Error)
 
-    var title: String {
+    public var title: String {
         switch self {
         case .internetError:
             return "Connection Failed"
@@ -23,7 +23,7 @@ public enum APIError: Error {
         }
     }
 
-    var description: String {
+    public var description: String {
         switch self {
         case .internetError:
             return "Check your connection."

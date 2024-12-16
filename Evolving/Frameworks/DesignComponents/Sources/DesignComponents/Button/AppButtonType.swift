@@ -36,7 +36,7 @@ public enum AppButtonType: AppButtonStyle {
     var backgroundColor: Color {
         switch self {
         case .primary:
-            return .indigo
+            return .navigationButton
         case .secondary:
             return .indigo.opacity(0.15)
         case .success:

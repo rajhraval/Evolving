@@ -31,12 +31,8 @@ public struct CachedImageView: View {
                     .frame(width: width, height: height)
                     .clipShape(.rect(cornerRadius: cornerRadius))
                     .clipped()
-            } else if state.error != nil {
-                Color.red
-                    .frame(width: width, height: height)
-                    .clipShape(.rect(cornerRadius: cornerRadius))
             } else {
-                Color.blue
+                Color.gray.opacity(0.5)
                     .frame(width: width, height: height)
                     .clipShape(.rect(cornerRadius: cornerRadius))
             }

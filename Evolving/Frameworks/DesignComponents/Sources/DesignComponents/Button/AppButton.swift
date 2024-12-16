@@ -63,7 +63,11 @@ public struct AppButton<Label: View>: View {
 }
 
 #Preview {
-    AppButton("Hello") {
+    ZStack {
+        Color.black
+        AppButton(systemName: "checkmark") {
 
+        }
+        .navigationButtonStyle(.primary)
     }
 }

@@ -17,7 +17,12 @@ public extension View {
         modifier(SymbolButtonStyle(type: style))
     }
 
-    func chipButtonStyle(_ style: AppButtonType) -> some View {
-        modifier(ChipButtonStyle(type: style))
+    func chipButtonStyle(_ isActive: Bool) -> some View {
+        modifier(ChipButtonStyle(isActive: isActive))
     }
+
+    func navigationButtonStyle(_ style: AppButtonType) -> some View {
+        modifier(NavigationButtonStyle(type: style))
+    }
+
 }
