@@ -93,6 +93,8 @@ Response Format:
   ]
 }
 ```
+### Assumptions
+Since the search handles the filtering itself, I have no added parameters to search based on keywords nor problem filters
 
 ### Project Structure
 - `db.json`: Mock data for the API
