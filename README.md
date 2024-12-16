@@ -27,11 +27,10 @@ open Evolving.xcodeproj
 2. Press `Cmd + R` or click the Play button to build and run the project
 
 ### Project Structure
-The iOS project follows a modular architecture:
-- `Modules/`: Contains feature-specific modules
-  - `Explore/`: Main exploration feature module
-- `Frameworks/`: Contains reusable frameworks
-  - `Utils/`: Utility functions and helpers
+The iOS project follows MVVM architecture, powered by 3 Swift Packages:
+- Networking - Handles networking operations, model, response and services
+- DesignComponents - Reusable UI components and Design System
+- Utils - Utility classes and extensions
 
 ### Development
 The iOS project uses Swift Package Manager for dependency management. All dependencies are automatically resolved when opening the project in Xcode.
@@ -116,4 +115,4 @@ If you encounter any server issues:
 
 ## Key Takeaways
 - Using Swift Package Manager making it a practice
-- Learning about Node.js and json-server for the mock server
+- Learning about Node.js and json-server for the mock server (obviously with the help of LLMs)
