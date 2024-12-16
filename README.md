@@ -1,6 +1,7 @@
 # Evolving
 
-A demo iOS application
+A demo iOS app
+![App Banner](https://github.com/user-attachments/assets/860a9e20-ec6d-4a72-847b-e84586bf10d5)
 
 ## For the iOS App
 
@@ -116,3 +117,7 @@ If you encounter any server issues:
 ## Key Takeaways
 - Using Swift Package Manager making it a practice
 - Learning about Node.js and json-server for the mock server (obviously with the help of LLMs)
+
+### Video Demo
+https://github.com/user-attachments/assets/3a045a72-1d62-4d55-a4a7-b0397e5ad1d3
+
