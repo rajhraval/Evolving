@@ -37,8 +37,8 @@ class ExploreViewModel {
     private let exploreService: ExploreService
     private let fileStorage: FileStorage
     private let cacheFileName = "explore_cache.json"
-    
-    // MARK: - Initialization
+    private let limit = 10
+
     
     init(
         exploreService: ExploreService = ExploreService(),
@@ -56,21 +56,6 @@ class ExploreViewModel {
         await fetchExploreData()
     }
     
-    private func loadFromCache() -> ExploreResponse? {
-        fileStorage.load(from: cacheFileName, as: ExploreResponse.self)
-    }
-    
-    private func updateStateFromCache(_ cachedResponse: ExploreResponse) {
-        exploreItems = cachedResponse.data
-        exploreProblems = [.all] + cachedResponse.problemFilters
-        totalPages = cachedResponse.metadata.totalPages
-        
-        // Calculate next page based on cached items
-        let itemsPerPage = 10
-        currentPage = (exploreItems.count / itemsPerPage) + 1
-        hasMorePages = currentPage <= totalPages
-    }
-    
     private func fetchExploreData() async {
         guard !isFetchingNextPage else { return }
         
@@ -78,7 +63,7 @@ class ExploreViewModel {
         isFetchingNextPage = true
         
         do {
-            let response = try await exploreService.fetchExploreData(page: currentPage, limit: 10)
+            let response = try await exploreService.fetchExploreData(page: currentPage, limit: limit)
 
             hasMorePages = currentPage < response.metadata.totalPages
             currentPage += 1
@@ -104,7 +89,25 @@ class ExploreViewModel {
 
         await fetchExploreData()
     }
-    
+
+}
+
+extension ExploreViewModel {
+
+    private func loadFromCache() -> ExploreResponse? {
+        fileStorage.load(from: cacheFileName, as: ExploreResponse.self)
+    }
+
+    private func updateStateFromCache(_ cachedResponse: ExploreResponse) {
+        exploreItems = cachedResponse.data
+        exploreProblems = [.all] + cachedResponse.problemFilters
+        totalPages = cachedResponse.metadata.totalPages
+
+        let itemsPerPage = limit
+        currentPage = (exploreItems.count / itemsPerPage) + 1
+        hasMorePages = currentPage <= totalPages
+    }
+
     private func saveExploreResponse(_ exploreResponse: ExploreResponse) {
         if currentPage == 2 {
             exploreItems = exploreResponse.data
@@ -119,7 +122,8 @@ class ExploreViewModel {
             data: exploreItems,
             problemFilters: exploreProblems.filter { $0 != .all }
         )
-    
+
         fileStorage.save(cacheResponse, to: cacheFileName)
     }
+
 }
