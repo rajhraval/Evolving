@@ -6,8 +6,8 @@ A demo iOS app
 ## For the iOS App
 
 ### Requirements
-- macOS Ventura 13.0 or later
-- Xcode 15.0 or later
+- macOS Sequoia 15.0 or later
+- Xcode 16.0 or later
 - iOS 17.0 or later
 - Swift 5.9 or later
 
