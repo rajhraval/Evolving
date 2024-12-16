@@ -5,14 +5,6 @@ const middlewares = jsonServer.defaults();
 
 server.use(middlewares);
 
-// Disable caching
-server.use((req, res, next) => {
-  res.header('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.header('Pragma', 'no-cache');
-  res.header('Expires', '0');
-  next();
-});
-
 // Custom route for /api/explore with pagination and extra data
 server.get("/api/explore", (req, res) => {
   // Get the raw data
